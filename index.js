@@ -23,9 +23,17 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use('/user/:id', (req, res, next) => {
   console.log('Request URL:', req.originalUrl)
   next()
+}, (req, res, next) => {
+  logger(req)
+  next()
 }, (req, res) => {
   res.send(`User Info ${req.params.id}`)
 })
+
+function logger(request) {
+  console.log('middleware example')
+  console.log('middleware Request URL:', request.originalUrl)
+}
 
 //use EJS
 app.set('view engine', 'ejs');
