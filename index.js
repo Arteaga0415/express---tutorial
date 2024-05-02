@@ -3,7 +3,6 @@ const path = require('path');
 const app = express()
 const port = 3000
 
-const items = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'];
 //send text
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -19,6 +18,23 @@ app.get('/example', (req, res) => {
 })
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
+
+//middleware
+app.use('/user/:id', (req, res, next) => {
+  console.log('Request URL:', req.originalUrl)
+  next()
+}, (req, res) => {
+  res.send(`User Info ${req.params.id}`)
+})
+
+//use EJS
+app.set('view engine', 'ejs');
+app.set('views', './views');
+//set route for ejs
+const items = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'];
+app.get('/example/ejs', (req, res) => {
+  res.render('example', { items });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
